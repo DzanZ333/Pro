@@ -1,10 +1,10 @@
 local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/bloodball/-back-ups-for-libs/main/wizard"))()
 
-local PhantomForcesWindow = Library:NewWindow("OP")
+local PhantomForcesWindow = Library:NewWindow("🌟JUJUTSU LEGACY🌟")
 
 local KillingCheats = PhantomForcesWindow:NewSection("PREMIUM")
 
-KillingCheats:CreateButton("Dagon C", function()
+KillingCheats:CreateButton("Dagon OP", function()
 
 while true do
 
@@ -24,7 +24,7 @@ end
 
 end)
 
-KillingCheats:CreateButton("CR", function()
+KillingCheats:CreateButton("Cursed Reversal", function()
 
 while true do
 
@@ -47,6 +47,26 @@ end)
 KillingCheats:CreateButton("Barrier", function()
 
 game:GetService("ReplicatedStorage"):WaitForChild("CharacterEvents"):WaitForChild("Tengen"):WaitForChild("NMove"):FireServer()
+
+end)
+
+KillingCheats:CreateButton("Choso OP", function()
+
+while true do
+
+local args = {
+
+[1] = "Choso",
+
+[2] = "UseC"
+
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Event"):WaitForChild("TakabaEvent"):FireServer(unpack(args))
+
+wait()
+
+end
 
 end)
 
