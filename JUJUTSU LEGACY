@@ -52,9 +52,11 @@ game:GetService("ReplicatedStorage"):WaitForChild("CharacterEvents"):WaitForChil
 
 end)
 
-KillingCheats:CreateButton("Choso OP", function()
+KillingCheats:CreateToggle("Auto CR", function(gay)
 
-while true do
+G_loop = gay
+
+while G_loop do
 
 local args = {
 
@@ -66,7 +68,7 @@ local args = {
 
 game:GetService("ReplicatedStorage"):WaitForChild("Event"):WaitForChild("TakabaEvent"):FireServer(unpack(args))
 
-wait()
+wait(1)
 
 end
 
