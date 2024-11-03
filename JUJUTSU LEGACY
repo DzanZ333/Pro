@@ -48,7 +48,9 @@ local KillingCheats = PhantomForcesWindow:NewSection("MISC")
 
 KillingCheats:CreateButton("Speed 90", function()
 
+while true do
 game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 90
+end
 
 end)
 
