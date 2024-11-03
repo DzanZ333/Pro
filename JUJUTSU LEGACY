@@ -44,6 +44,12 @@ end
 
 end)
 
+KillingCheats:CreateButton("Barrier", function()
+
+game:GetService("ReplicatedStorage"):WaitForChild("CharacterEvents"):WaitForChild("Tengen"):WaitForChild("NMove"):FireServer()
+
+end)
+
 local KillingCheats = PhantomForcesWindow:NewSection("MISC")
 
 KillingCheats:CreateButton("Speed 90", function()
