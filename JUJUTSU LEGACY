@@ -70,6 +70,28 @@ end
 
 end)
 
+KillingCheats:CreateToggle("Auto CR", function(gay)
+
+G_loop = gay
+
+while G_loop do
+
+local args = {
+
+    [1] = "Cursed Reversal",
+
+    [2] = Vector3.new(1569.3326416015625, 1178.320556640625, -4000.77001953125)
+
+}
+
+game:GetService("Players").LocalPlayer.Character.ReversalTechnique.RemoteEvent:FireServer(unpack(args))
+
+wait(6)
+
+end
+
+end)
+
 local KillingCheats = PhantomForcesWindow:NewSection("MISC")
 
 KillingCheats:CreateButton("Speed 90", function()
