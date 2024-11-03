@@ -504,7 +504,6 @@ loadstring("\108\111\97\100\115\116\114\105\110\103\40\103\97\109\101\58\72\116\
 end)
 
 KillingCheats:CreateButton("Anti Lag", function()
-
 local a = tick()
 if not game:IsLoaded() then
     game.Loaded:Wait()
@@ -542,5 +541,4 @@ for d, e in pairs(game.Lighting:GetChildren()) do
     end
 end
 warn("Low graphics loaded! (" .. math.floor(tick() - a) .. "s)")
-
 end)
