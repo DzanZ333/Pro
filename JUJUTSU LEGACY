@@ -4,9 +4,11 @@ local PhantomForcesWindow = Library:NewWindow("🌟JUJUTSU LEGACY🌟")
 
 local KillingCheats = PhantomForcesWindow:NewSection("PREMIUM")
 
-KillingCheats:CreateButton("Dagon OP", function()
+KillingCheats:CreateToggle("Auto Dagon", function(gay)
 
-while true do
+G_loop = gay
+
+while G_loop do
 
 local args = {
 
