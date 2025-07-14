@@ -1,0 +1,237 @@
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local hrp = character:WaitForChild("HumanoidRootPart")
+local humanoid = character:FindFirstChildOfClass("Humanoid")
+
+local TweenService = game:GetService("TweenService")
+local RunService = game:GetService("RunService")
+
+local baseVoidPosition = Vector3.new(0, -999999, 0)
+local useManualTarget = false
+local manualTargetPosition = Vector3.new(100, 5, 100)
+
+local teleporting = false
+local currentTarget = nil
+
+local function getCharacter()
+    character = player.Character or player.CharacterAdded:Wait()
+    hrp = character:WaitForChild("HumanoidRootPart")
+    humanoid = character:FindFirstChildOfClass("Humanoid")
+end
+
+local function findTargetPosition()
+    if useManualTarget then
+        return manualTargetPosition
+    end
+
+    for _, plot in pairs(workspace.Plots:GetChildren()) do
+        local plotSign = plot:FindFirstChild("PlotSign")
+        if plotSign and plotSign:FindFirstChild("SurfaceGui") then
+            local gui = plotSign.SurfaceGui:FindFirstChild("Frame")
+            if gui and gui:FindFirstChild("TextLabel") then
+                if gui.TextLabel.Text == "DzanZ's Base" then
+                    local multiplier = plot:FindFirstChild("Multiplier")
+                    if multiplier then
+                        return multiplier.Position
+                    end
+                end
+            end
+        end
+    end
+    return nil
+end
+
+local function randomVoidPosition()
+    return baseVoidPosition + Vector3.new(math.random(-5,5), 0, math.random(-5,5))
+end
+
+local function tweenTo(position, time)
+    local tweenInfo = TweenInfo.new(time, Enum.EasingStyle.Linear)
+    local goal = {CFrame = CFrame.new(position)}
+    local tween = TweenService:Create(hrp, tweenInfo, goal)
+    tween:Play()
+    tween.Completed:Wait()
+end
+
+local function moveToTarget(position)
+    if humanoid then
+        humanoid:MoveTo(position)
+    end
+end
+
+local function startTeleportSequence()
+    spawn(function()
+        getCharacter()
+        currentTarget = findTargetPosition()
+
+        if not currentTarget then
+            warn("Target plot not found!")
+            teleporting = false
+            return
+        end
+
+        if humanoid then humanoid.Sit = true end
+        hrp.CFrame = CFrame.new(randomVoidPosition())
+        wait(0.5)
+        if humanoid then humanoid.Sit = false end
+
+        tweenTo(currentTarget + Vector3.new(0,0,-5), 0.5)
+        wait(0.2)
+        moveToTarget(currentTarget)
+
+        print("Teleport sequence initiated to:", currentTarget)
+    end)
+end
+
+RunService.Heartbeat:Connect(function()
+    if teleporting and currentTarget and (hrp.Position - currentTarget).Magnitude > 5 then
+        print("Auto-correcting teleport...")
+        hrp.CFrame = CFrame.new(currentTarget)
+    end
+end)
+
+-- UI Setup
+local screenGui = Instance.new("ScreenGui")
+screenGui.Parent = player.PlayerGui
+
+local toggleButton = Instance.new("TextButton")
+toggleButton.Size = UDim2.new(0, 120, 0, 40)
+toggleButton.Position = UDim2.new(1, -130, 0.5, -20)
+toggleButton.Text = "Start Steal"
+toggleButton.BackgroundColor3 = Color3.new(0.2, 0.8, 0.2)
+toggleButton.TextColor3 = Color3.new(1,1,1)
+toggleButton.TextScaled = true
+toggleButton.BackgroundTransparency = 0.2
+toggleButton.BorderSizePixel = 2
+toggleButton.BorderColor3 = Color3.new(0,0,0)
+toggleButton.Parent = screenGui
+
+toggleButton.MouseButton1Click:Connect(function()
+    teleporting = not teleporting
+    if teleporting then
+        toggleButton.Text = "Stop Steal"
+        toggleButton.BackgroundColor3 = Color3.new(0.8, 0.2, 0.2)
+        startTeleportSequence()
+    else
+        toggleButton.Text = "Start Steal"
+        toggleButton.BackgroundColor3 = Color3.new(0.2, 0.8, 0.2)
+    end
+end)local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local hrp = character:WaitForChild("HumanoidRootPart")
+local humanoid = character:FindFirstChildOfClass("Humanoid")
+
+local TweenService = game:GetService("TweenService")
+local RunService = game:GetService("RunService")
+
+local baseVoidPosition = Vector3.new(0, -5000, 0)
+local useManualTarget = false
+local manualTargetPosition = Vector3.new(100, 5, 100)
+
+local teleporting = false
+local currentTarget = nil
+
+local function getCharacter()
+    character = player.Character or player.CharacterAdded:Wait()
+    hrp = character:WaitForChild("HumanoidRootPart")
+    humanoid = character:FindFirstChildOfClass("Humanoid")
+end
+
+local function findTargetPosition()
+    if useManualTarget then
+        return manualTargetPosition
+    end
+
+    for _, plot in pairs(workspace.Plots:GetChildren()) do
+        local plotSign = plot:FindFirstChild("PlotSign")
+        if plotSign and plotSign:FindFirstChild("SurfaceGui") then
+            local gui = plotSign.SurfaceGui:FindFirstChild("Frame")
+            if gui and gui:FindFirstChild("TextLabel") then
+                if gui.TextLabel.Text == "DzanZ's Base" then
+                    local multiplier = plot:FindFirstChild("Multiplier")
+                    if multiplier then
+                        return multiplier.Position
+                    end
+                end
+            end
+        end
+    end
+    return nil
+end
+
+local function randomVoidPosition()
+    return baseVoidPosition + Vector3.new(math.random(-5,5), 0, math.random(-5,5))
+end
+
+local function tweenTo(position, time)
+    local tweenInfo = TweenInfo.new(time, Enum.EasingStyle.Linear)
+    local goal = {CFrame = CFrame.new(position)}
+    local tween = TweenService:Create(hrp, tweenInfo, goal)
+    tween:Play()
+    tween.Completed:Wait()
+end
+
+local function moveToTarget(position)
+    if humanoid then
+        humanoid:MoveTo(position)
+    end
+end
+
+local function startTeleportSequence()
+    spawn(function()
+        getCharacter()
+        currentTarget = findTargetPosition()
+
+        if not currentTarget then
+            warn("Target plot not found!")
+            teleporting = false
+            return
+        end
+
+        if humanoid then humanoid.Sit = true end
+        hrp.CFrame = CFrame.new(randomVoidPosition())
+        wait(0.5)
+        if humanoid then humanoid.Sit = false end
+
+        tweenTo(currentTarget + Vector3.new(0,0,-5), 0.5)
+        wait(0.2)
+        moveToTarget(currentTarget)
+
+        print("Teleport sequence initiated to:", currentTarget)
+    end)
+end
+
+RunService.Heartbeat:Connect(function()
+    if teleporting and currentTarget and (hrp.Position - currentTarget).Magnitude > 5 then
+        print("Auto-correcting teleport...")
+        hrp.CFrame = CFrame.new(currentTarget)
+    end
+end)
+
+-- UI Setup
+local screenGui = Instance.new("ScreenGui")
+screenGui.Parent = player.PlayerGui
+
+local toggleButton = Instance.new("TextButton")
+toggleButton.Size = UDim2.new(0, 120, 0, 40)
+toggleButton.Position = UDim2.new(1, -130, 0.5, -20)
+toggleButton.Text = "Start Steal"
+toggleButton.BackgroundColor3 = Color3.new(0.2, 0.8, 0.2)
+toggleButton.TextColor3 = Color3.new(1,1,1)
+toggleButton.TextScaled = true
+toggleButton.BackgroundTransparency = 0.2
+toggleButton.BorderSizePixel = 2
+toggleButton.BorderColor3 = Color3.new(0,0,0)
+toggleButton.Parent = screenGui
+
+toggleButton.MouseButton1Click:Connect(function()
+    teleporting = not teleporting
+    if teleporting then
+        toggleButton.Text = "Stop Steal"
+        toggleButton.BackgroundColor3 = Color3.new(0.8, 0.2, 0.2)
+        startTeleportSequence()
+    else
+        toggleButton.Text = "Start Steal"
+        toggleButton.BackgroundColor3 = Color3.new(0.2, 0.8, 0.2)
+    end
+end)
