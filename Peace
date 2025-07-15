@@ -1,0 +1,113 @@
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local TweenService = game:GetService("TweenService")
+
+local player = Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local hrp = character:WaitForChild("HumanoidRootPart")
+local humanoid = character:FindFirstChildOfClass("Humanoid")
+
+local teleporting = false
+local baseVoidPosition = Vector3.new(0, -3.4028235e+38, 0) -- Deep void
+
+-- Disable or Enable collision for the whole character
+local function setCollision(state)
+    for _, part in pairs(character:GetDescendants()) do
+        if part:IsA("BasePart") then
+            part.CanCollide = state
+        end
+    end
+end
+
+local function getCharacter()
+    character = player.Character or player.CharacterAdded:Wait()
+    hrp = character:WaitForChild("HumanoidRootPart")
+    humanoid = character:FindFirstChildOfClass("Humanoid")
+end
+
+local function findDeliveryHitbox()
+    for _, plot in pairs(workspace.Plots:GetChildren()) do
+        local plotSign = plot:FindFirstChild("PlotSign")
+        if plotSign then
+            local yourBase = plotSign:FindFirstChild("YourBase")
+            if yourBase and yourBase.Enabled then
+                local hitbox = plot:FindFirstChild("DeliveryHitbox")
+                if hitbox then
+                    return hitbox
+                end
+            end
+        end
+    end
+    return nil
+end
+
+local function randomVoidPosition()
+    return baseVoidPosition + Vector3.new(math.random(-5,5), 0, math.random(-5,5))
+end
+
+local function safeTeleportToDelivery()
+    spawn(function()
+        getCharacter()
+        setCollision(false) -- Disable collision first
+
+        local deliveryHitbox = findDeliveryHitbox()
+        if not deliveryHitbox then
+            warn("DeliveryHitbox not found!")
+            teleporting = false
+            setCollision(true) -- Enable collision back if fail
+            return
+        end
+
+        local targetPosition = deliveryHitbox.Position + Vector3.new(0, -3, 0)
+
+        hrp.CFrame = CFrame.new(randomVoidPosition())
+        task.wait(0.5)
+
+        local tweenInfo = TweenInfo.new(0.5, Enum.EasingStyle.Linear)
+        local goal = {CFrame = CFrame.new(targetPosition)}
+        local tween = TweenService:Create(hrp, tweenInfo, goal)
+        tween:Play()
+        tween.Completed:Wait()
+
+        hrp.CFrame = CFrame.new(targetPosition)
+        setCollision(true) -- Enable collision back
+        print("Teleported to Delivery Box:", targetPosition)
+    end)
+end
+
+RunService.Heartbeat:Connect(function()
+    if teleporting then
+        local deliveryHitbox = findDeliveryHitbox()
+        if deliveryHitbox and (hrp.Position - deliveryHitbox.Position).Magnitude > 10 then
+            print("Auto-correcting position to delivery...")
+            setCollision(false)
+            hrp.CFrame = CFrame.new(deliveryHitbox.Position + Vector3.new(0, -3, 0))
+            setCollision(true)
+        end
+    end
+end)
+
+-- UI Toggle Button
+local screenGui = Instance.new("ScreenGui", player.PlayerGui)
+local toggleButton = Instance.new("TextButton", screenGui)
+toggleButton.Size = UDim2.new(0, 120, 0, 40)
+toggleButton.Position = UDim2.new(1, -130, 0.5, -20)
+toggleButton.Text = "Start Steal"
+toggleButton.BackgroundColor3 = Color3.new(0.2, 0.8, 0.2)
+toggleButton.TextColor3 = Color3.new(1,1,1)
+toggleButton.TextScaled = true
+toggleButton.BackgroundTransparency = 0.2
+toggleButton.BorderSizePixel = 2
+toggleButton.BorderColor3 = Color3.new(0,0,0)
+
+toggleButton.MouseButton1Click:Connect(function()
+    teleporting = not teleporting
+    if teleporting then
+        toggleButton.Text = "Stop Steal"
+        toggleButton.BackgroundColor3 = Color3.new(0.8, 0.2, 0.2)
+        safeTeleportToDelivery()
+    else
+        toggleButton.Text = "Start Steal"
+        toggleButton.BackgroundColor3 = Color3.new(0.2, 0.8, 0.2)
+    end
+end)
